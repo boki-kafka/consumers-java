@@ -41,6 +41,7 @@ public class WakeupConsumer {
                         mainThread.join();
                     } catch (InterruptedException e) {
                         logger.error(e.getMessage());
+                        throw new RuntimeException(e);
                     }
                 }
 
@@ -52,8 +53,8 @@ public class WakeupConsumer {
                 ConsumerRecords<String, String> consumerRecords =
                     consumer.poll(Duration.ofMillis(1000));
                 for (ConsumerRecord<String, String> record : consumerRecords) {
-                    logger.info("record key: {}, value: {}, partition: {}",
-                        record.key(), record.value(), record.partition()
+                    logger.info("record key: {}, value: {}, partition: {}, offset: {}",
+                        record.key(), record.value(), record.partition(), record.offset()
                     );
                 }
             }
@@ -73,6 +74,7 @@ public class WakeupConsumer {
         props.put(KEY_DESERIALIZER_CLASS_CONFIG, keyDeSerClass.getName());
         props.put(VALUE_DESERIALIZER_CLASS_CONFIG, valueDeSerClass.getName());
         props.put(GROUP_ID_CONFIG, "group_01");
+        props.put(AUTO_OFFSET_RESET_CONFIG, "latest");
 
         return props;
     }
