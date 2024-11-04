@@ -1,6 +1,7 @@
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.consumer.ConsumerRecords;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
+import org.apache.kafka.clients.consumer.RoundRobinAssignor;
 import org.apache.kafka.common.errors.WakeupException;
 import org.apache.kafka.common.serialization.Deserializer;
 import org.apache.kafka.common.serialization.StringDeserializer;
@@ -15,6 +16,7 @@ import static org.apache.kafka.clients.consumer.ConsumerConfig.BOOTSTRAP_SERVERS
 import static org.apache.kafka.clients.consumer.ConsumerConfig.GROUP_ID_CONFIG;
 import static org.apache.kafka.clients.consumer.ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG;
 import static org.apache.kafka.clients.consumer.ConsumerConfig.MAX_POLL_INTERVAL_MS_CONFIG;
+import static org.apache.kafka.clients.consumer.ConsumerConfig.PARTITION_ASSIGNMENT_STRATEGY_CONFIG;
 import static org.apache.kafka.clients.consumer.ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG;
 
 public class MultiTopicReBalanceConsumer {
@@ -79,7 +81,8 @@ public class MultiTopicReBalanceConsumer {
         props.put(BOOTSTRAP_SERVERS_CONFIG, "10.211.55.53:9092");
         props.put(KEY_DESERIALIZER_CLASS_CONFIG, keyDeSerClass.getName());
         props.put(VALUE_DESERIALIZER_CLASS_CONFIG, valueDeSerClass.getName());
-        props.put(GROUP_ID_CONFIG, "group-mtopic");
+        props.put(GROUP_ID_CONFIG, "group-assign");
+        props.put(PARTITION_ASSIGNMENT_STRATEGY_CONFIG, RoundRobinAssignor.class.getName());
 
         return props;
     }
