@@ -1,5 +1,6 @@
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.consumer.ConsumerRecords;
+import org.apache.kafka.clients.consumer.CooperativeStickyAssignor;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
 import org.apache.kafka.clients.consumer.RoundRobinAssignor;
 import org.apache.kafka.common.errors.WakeupException;
@@ -78,11 +79,13 @@ public class MultiTopicReBalanceConsumer {
         Class<? extends Deserializer<V>> valueDeSerClass
     ) {
         Properties props = new Properties();
-        props.put(BOOTSTRAP_SERVERS_CONFIG, "10.211.55.53:9092");
+//        props.put(BOOTSTRAP_SERVERS_CONFIG, "10.211.55.53:9092");
+        props.put(BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
         props.put(KEY_DESERIALIZER_CLASS_CONFIG, keyDeSerClass.getName());
         props.put(VALUE_DESERIALIZER_CLASS_CONFIG, valueDeSerClass.getName());
         props.put(GROUP_ID_CONFIG, "group-assign");
-        props.put(PARTITION_ASSIGNMENT_STRATEGY_CONFIG, RoundRobinAssignor.class.getName());
+//        props.put(PARTITION_ASSIGNMENT_STRATEGY_CONFIG, RoundRobinAssignor.class.getName());
+        props.put(PARTITION_ASSIGNMENT_STRATEGY_CONFIG, CooperativeStickyAssignor.class.getName());
 
         return props;
     }
